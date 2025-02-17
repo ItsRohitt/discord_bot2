@@ -1,5 +1,8 @@
 require('dotenv').config();
 const { Client, GatewayIntentBits, PermissionsBitField } = require('discord.js');
+const express = require('express');
+const https = require('https');
+const fs = require('fs');
 
 const client = new Client({
     intents: [
@@ -19,6 +22,11 @@ client.on('messageCreate', async (message) => {
 
     const args = message.content.split(" ");
     const command = args.shift().toLowerCase();
+
+    // 📌 Perintah !ping
+    if (command === '!ping') {
+        message.reply('🏓 Pong!');
+    }
 
     // 📌 Perintah !hello
     if (command === 'r!hello') {
@@ -59,6 +67,32 @@ client.on('messageCreate', async (message) => {
     if (command === 'r!help') {
         message.reply(
             "**📜 Daftar Perintah Bot:**\n" +
+            "`!ping` - Mengecek respons bot\n" +
             "`r!hello` - Menyapa bot\n" +
             "`r!info` - Menampilkan info server\n" +
-            "`r!kick @user` - Mengeluarkan pengguna (b
+            "`r!kick @user` - Mengeluarkan pengguna (butuh izin)\n" +
+            "`r!owner` - Menampilkan pesan spesial 😎\n" +
+            "`r!help` - Menampilkan daftar perintah"
+        );
+    }
+});
+
+// 🔑 LOGIN BOT
+client.login(process.env.TOKEN);
+
+// Web Server dengan HTTPS
+const app = express();
+const PORT = 3000;
+
+const options = {
+    key: fs.readFileSync('key.pem'),
+    cert: fs.readFileSync('cert.pem')
+};
+
+app.get('/', (req, res) => {
+    res.send('<h1>Hello World</h1>');
+});
+
+https.createServer(options, app).listen(PORT, () => {
+    console.log(`🌐 Web server berjalan di https://localhost:${PORT}`);
+});
