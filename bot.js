@@ -18,27 +18,23 @@ client.once('ready', () => {
 });
 
 client.on('messageCreate', async (message) => {
-    if (message.author.bot || !message.guild) return;
+    if (message.author.bot || !message.guild) return; // 🔹 Cegah bot merespon dirinya sendiri
 
-    const args = message.content.split(" ");
+    const args = message.content.trim().split(" ");
     const command = args.shift().toLowerCase();
 
-    // 📌 Perintah !ping
-    if (command === '!ping') {
-        message.reply('🏓 Pong!');
+    if (command === 'r!ping') {
+        return message.reply('🏓 Pong!');
     }
 
-    // 📌 Perintah !hello
     if (command === 'r!hello') {
-        message.reply(`👋 Hawooooo, ${message.author.username}!`);
+        return message.reply(`👋 Hawooooo, ${message.author.username}!`);
     }
 
-    // 📌 Perintah !info
     if (command === 'r!info') {
-        message.reply(`ℹ️ Server: ${message.guild.name} | Anggota: ${message.guild.memberCount}`);
+        return message.reply(`ℹ️ Server: ${message.guild.name} | Anggota: ${message.guild.memberCount}`);
     }
 
-    // 📌 Perintah !kick @user
     if (command === 'r!kick') {
         if (!message.member.permissions.has(PermissionsBitField.Flags.KickMembers)) {
             return message.reply("❌ Kamu tidak punya izin untuk mengeluarkan anggota.");
@@ -58,16 +54,14 @@ client.on('messageCreate', async (message) => {
         }
     }
 
-    // 📌 Perintah !owner
     if (command === 'r!owner') {
-        message.reply("RHT GANTENK 😎");
+        return message.reply("RHT GANTENK 😎");
     }
 
-    // 📌 Perintah !help
     if (command === 'r!help') {
-        message.reply(
+        return message.reply(
             "**📜 Daftar Perintah Bot:**\n" +
-            "`!ping` - Mengecek respons bot\n" +
+            "`r!ping` - Mengecek respons bot\n" +
             "`r!hello` - Menyapa bot\n" +
             "`r!info` - Menampilkan info server\n" +
             "`r!kick @user` - Mengeluarkan pengguna (butuh izin)\n" +
